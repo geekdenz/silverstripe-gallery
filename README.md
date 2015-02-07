@@ -28,6 +28,23 @@ You are required to [purchase a licence for Fancybox](http://fancyapps.com/fancy
 ### Composer
 1. ```composer require frankmullenger/gallery 1.0.*@dev```
 2. Visit yoursite.com/dev/build?flush=1 to rebuild the database (you may need to do this twice).
+Editing composer.json like this worked for me:
+```
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/geekdenz/silverstripe-gallery.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "silverstripe/cms": "3.1.9",
+        "silverstripe/framework": "3.1.9",
+        "silverstripe-themes/simple": "*",
+        "colymba/gridfield-bulk-editing-tools": "2.1.1",
+        "frankmullenger/gallery": "*"
+    }
+```
 
 ### Manual
 1. Place this directory in the root of your SilverStripe installation, rename the folder 'gallery'.
