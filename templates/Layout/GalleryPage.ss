@@ -4,8 +4,8 @@
 </article>
 <div class="gallery-images">
     <% loop OrderedImages %>
-        <a class="fancybox" data-fancybox-group="gallery" href="$Filename" title="$Caption">
-            $SetSize(250,250)
+        <a class="fancybox" data-fancybox-group="gallery" href="$ResizedFilename" title="$Caption">
+            $Half
         </a>
     <% end_loop %>
 </div>

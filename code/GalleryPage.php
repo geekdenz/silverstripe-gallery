@@ -12,10 +12,38 @@ class GalleryPage extends Page {
 		$fields->addFieldToTab('Root.Main', TextField::create('PreviewMax'), 'Content');
 		return $fields;
 	}
+	public function OrderedImagesSizedDefaults() {
+		$config = GalleryConfig::First();
+		$width = $config->DefaultWidth;
+		$limit = $config->DefaultNumberOfItems;
+		return $this->OrderedImagesSized($width, $limit);
+	}
+	/*
+	public function OrderedImagesIndividualSizes() {
+		$config = SiteConfig::current_site_config();
+		$width = $config->DefaultWidth;
+		$limit = $config->DefaultNumberOfItems;
+		$images = new ArrayList();
+		foreach ($this->OrderedImages() as $image) {
+			$w = !empty($image->DisplayWidth) ? $image->DisplayWidth : $width;
+			$images->add($image);
+		}
+		return $images;
+	}
+	public function OrderedImagesSized($width = 1800, $limit = PHP_INT_MAX) {
+		$images = new ArrayList();
+		foreach ($this->OrderedImagesLimit($limit) as $image) {
+			$images->add($image->setWidth($width));
+		}
+		return $images;
+	}
+	 * 
+	 */
+	public function OrderedImagesLimit($limit) {
+		return $this->OrderedImages()->limit($limit);
+	}
 	public function OrderedImagesLimited() {
-		//$limit = $this->PreviewMax;
-		//print_r($this->OrderedImages());
-		return $this->OrderedImages()->limit($this->PreviewMax);
+		return $this->OrderedImagesLimit($this->PreviewMax);
 	}
 }
 

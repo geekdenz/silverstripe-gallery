@@ -417,5 +417,7 @@ class GalleryUploadField_ItemHandler extends UploadField_ItemHandler {
 
 		return $this->edit($request);
 	}
-	
+	public function DisplayWidth() {
+		return $this->DisplayWidth;
+	}
 }

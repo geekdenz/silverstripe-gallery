@@ -29,8 +29,18 @@ class Gallery_PageExtension extends DataExtension {
 
 class Gallery_ImageExtension extends DataExtension {
 
+	static $db = array(
+		'DisplayWidth' => 'Int',
+		'PreviewWidth' => 'Int',
+		'PreviewHeight' => 'Int',
+	);
+	static $defaults = array(
+		'DisplayWidth' => -1,
+		'PreviewWidth' => 250,
+		'PreviewHeight' => 250,
+	);
 	private static $belongs_many_many = array(
-		'Pages' => 'Page'
+		'Pages' => 'Page',
 	);
 	
 	public function getUploadFields() {
@@ -39,6 +49,9 @@ class Gallery_ImageExtension extends DataExtension {
 
 		$fileAttributes = $fields->fieldByName('Root.Main.FilePreview')->fieldByName('FilePreviewData');
 		$fileAttributes->push(TextareaField::create('Caption', 'Caption:')->setRows(4));
+		$fileAttributes->push(TextField::create('DisplayWidth', 'Display Width:'));
+		$fileAttributes->push(TextField::create('PreviewWidth', 'Preview Width:'));
+		$fileAttributes->push(TextField::create('PreviewHeight', 'Preview Height:'));
 
 		$fields->removeFieldsFromTab('Root.Main', array(
 			'Title',
@@ -48,7 +61,7 @@ class Gallery_ImageExtension extends DataExtension {
 			'Created',
 			'LastEdited',
 			'BackLinkCount',
-			'Dimensions'
+			//'Dimensions'
 		));
 		return $fields;
 	}
@@ -70,5 +83,32 @@ class Gallery_ImageExtension extends DataExtension {
                 }
                 
                 return false;
+	}
+	public function ResizedFilename() {
+		if (empty($this->owner->DisplayWidth) || $this->owner->DisplayWidth == -1) {
+			$config = SiteConfig::current_site_config();
+			$width = $config->DefaultWidth;
+		} else {
+			$width = $this->owner->DisplayWidth;
+		}
+		return $this->owner->SetWidth($width)->Filename;
+	}
+	public function PreviewImage() {
+		$width = $this->owner->PreviewWidth;
+		$height = $this->owner->PreviewHeight;
+		return $this->owner->SetSize($width, $height);
+	}
+	public function Half() {
+		$width = $this->owner->PreviewWidth;
+		$height = $this->owner->PreviewHeight;
+		if (empty($width)) {
+			$width = 250;
+		}
+		if (empty($height)) {
+			$height = 250;
+		}
+		$tag = $this->owner->SetSize($width*2, $height*2)->getTag();
+		return substr($tag, 0, -2) .'style="width:'. $width .
+				'px;height:'. $height .'px" '. substr($tag, -2);
 	}
 }
